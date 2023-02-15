@@ -72,9 +72,10 @@
 				<div class="row">
 					<section id="projects">
                         <ul>
-                        {% for i in range %}
-                            <li><h3>Post number {{ i }}</h3></li>
-                            <img src='../static/img/works/{{ i }}.jpg' alt="static/img/works/{{ i }}.jpg">
+                        {% for topic in topic_list %}
+                            <li><h3>{{ topic.title }}</h3></li>
+                            <h5>{{ topic.subtitle }}</h5>
+                            <p>{{ topic.text }}</p>
                         {% endfor %}
                         </ul>
                     </section>

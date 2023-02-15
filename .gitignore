@@ -2,3 +2,4 @@
 .venv
 account/migrations
 article/migrations
+/learning_system/static/admin/
