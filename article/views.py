@@ -1,8 +1,11 @@
 import datetime
 from django.db.models import Count, Avg, Max, Min
-from django.shortcuts import render
-from django.http import HttpResponse
+from django.shortcuts import render, redirect
+from django.http import HttpResponse, HttpResponseRedirect
 from article.models import Topic, User
+from article.forms import TopicForm
+from django.views.generic.list import ListView
+from django.views.generic.edit import FormView
 
 
 # def index(request):
@@ -10,7 +13,12 @@ from article.models import Topic, User
 
 
 def get_topic_list(request):
-    context = {'topic_list': Topic.objects.all()}
+    topic_type = request.GET.get('type', None)
+    if topic_type:
+        queryset = Topic.objects.filter(type=topic_type)
+    else:
+        queryset = Topic.objects.all()
+    context = {'topic_list': queryset}
     return render(request, 'courses.html', context)
 
 
@@ -78,3 +86,38 @@ def filter_topic(request):
     # topics = Topic.objects.annotate(Count('author'))
     # topics = Topic.objects.aggregate(Max('text__len'))
     return render(request, 'courses.html', {'topic_list': topics})
+
+
+def create_topic_form(request):
+    if request.method == 'POST':
+        print(request.POST.get("title"))
+        form = TopicForm(request.POST)
+        if form.is_valid():
+            # Topic.objects.create(**form.cleaned_data)
+            return redirect('topic_list')
+    else:
+        form = TopicForm()
+        return render(request, 'contact.html', {'form': form})
+
+
+class TopicListView(ListView):
+    # model = Topic
+    template_name = 'courses.html'
+
+    def get_queryset(self):
+        topic_type = self.request.GET.get('type', None)
+        if topic_type:
+            self.queryset = Topic.objects.filter(type=topic_type)
+        else:
+            self.queryset = Topic.objects.all()
+        return self.queryset
+
+
+class TopicFormView(FormView):
+    template_name = 'contact.html'
+    form_class = TopicForm
+    success_url = '/articles/topics/'
+
+    def form_valid(self, form):
+        Topic.objects.create(**form.cleaned_data)
+        return HttpResponseRedirect(self.get_success_url())

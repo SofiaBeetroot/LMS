@@ -61,18 +61,18 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-12">
-				<ul class="portfolio-categ filter">
-					<li class="all active"><a href="#">All</a></li>
-					<li class="web"><a href="#" title="">Web design</a></li>
-					<li class="icon"><a href="#" title="">Mobile App</a></li>
-					<li class="graphic"><a href="#" title="">UI design</a></li>
+				<ul class="portfolio-categ">
+					<li class="all active"><a href="/articles/topics">All</a></li>
+					<li class="web"><a href="/articles/topics?type=1">Science</a></li>
+					<li class="icon"><a href="/articles/topics?type=4">Useful knowing</a></li>
+					<li class="graphic"><a href="/articles/topics?type=5">Tutorial</a></li>
 				</ul>
 				<div class="clearfix">
 				</div>
 				<div class="row">
 					<section id="projects">
                         <ul>
-                        {% for topic in topic_list %}
+                        {% for topic in object_list %}
                             <li><h3>{{ topic.title }}</h3></li>
                             <h5>{{ topic.subtitle }}</h5>
                             <p>{{ topic.text }}</p>
@@ -140,7 +140,7 @@
 				<div class="col-lg-6">
 					<div class="copyright">
 						<p>
-							<span>&copy; Genius Educational 2015 All right reserved. <a href="https://webthemez.com/free-bootstrap-templates/" target="_blank">Bootstrap Templates</a> By WebThemez
+							<span>&copy; Genius Educational 2015 All right reserved. <a href="https://webthemez.com/free-bootstrap-templates/" target="_blank">Bootstrap Templates</a> By WebThemez</span>
 						</p>
 					</div>
 				</div>
