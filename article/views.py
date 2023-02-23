@@ -19,7 +19,7 @@ def get_topic_list(request):
     else:
         queryset = Topic.objects.all()
     context = {'topic_list': queryset}
-    return render(request, 'courses.html', context)
+    return render(request, 'test.html', context)
 
 
 # Create - 2 variants
@@ -102,7 +102,7 @@ def create_topic_form(request):
 
 class TopicListView(ListView):
     # model = Topic
-    template_name = 'courses.html'
+    template_name = 'test.html'
 
     def get_queryset(self):
         topic_type = self.request.GET.get('type', None)
