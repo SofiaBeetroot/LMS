@@ -1,10 +1,5 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block css %}
-    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" />
-    <link href="{% static 'css/style.css' %}" rel="stylesheet" />
-    <link href="{% static 'css/list-groups.css' %}" rel="stylesheet" />
-{% endblock %}
 {% block content %}
 	<section id="inner-headline">
 	<div class="container">
@@ -27,18 +22,12 @@
 				</ul>
 				<div class="clearfix">
 				</div>
-				<div class="list-group list-group-checkable d-grid gap-2 border-0 w-auto">
+				<div>
 					<section id="projects">
                         {% for topic in object_list %}
-                            <label class="list-group-item rounded-3 py-3" for="listGroupCheckableRadios1">
-                                {{ topic.title }}
-                                <span class="d-block small opacity-50">{{ topic.text }}</span>
-                            </label>
-                            {% comment %}
-                            <li class="list-group-item rounded-3 py-3"><h3>{{ topic.title }}</h3></li>
-                            <h5>{{ topic.subtitle }}</h5>
+                            <h3><a href="{{ topic.id }}">{{ topic.title }}</a></h3>
                             <p>{{ topic.text }}</p>
-                            {% endcomment %}
+                            <hr>
                         {% endfor %}
                     </section>
 				</div>

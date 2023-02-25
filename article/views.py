@@ -2,7 +2,7 @@ import datetime
 from django.db.models import Count, Avg, Max, Min
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
-from article.models import Topic, User
+from article.models import Topic, User, Comments
 from article.forms import TopicForm
 from django.views.generic.list import ListView
 from django.views.generic.edit import FormView
@@ -102,7 +102,7 @@ def create_topic_form(request):
 
 class TopicListView(ListView):
     # model = Topic
-    template_name = 'test.html'
+    template_name = 'courses.html'
 
     def get_queryset(self):
         topic_type = self.request.GET.get('type', None)
@@ -121,3 +121,12 @@ class TopicFormView(FormView):
     def form_valid(self, form):
         Topic.objects.create(**form.cleaned_data)
         return HttpResponseRedirect(self.get_success_url())
+
+
+def get_single_topic(request, pk):
+    try:
+        topic = Topic.objects.get(id=pk)
+    except Topic.DoesNotExist:
+        topic = None
+    comments = Comments.objects.filter(topic=topic).order_by('-date')
+    return render(request, 'topic.html', {'topic': topic, 'comments': comments})
