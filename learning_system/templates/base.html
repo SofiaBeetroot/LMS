@@ -45,6 +45,12 @@
                         <li class="active"><a href="portfolio.html">Portfolio</a></li>
                         <li><a href="topic.html">Pricing</a></li>
                         <li><a href="contact.html">Contact</a></li>
+                        {% if user.is_authenticated %}
+                            <li><a href="#">Hi, {{ user.username }}</a></li>
+                            <li><a href="/accounts/logout">Log out</a></li>
+                        {% else %}
+                            <li><a href="/accounts/login">Log in</a></li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>

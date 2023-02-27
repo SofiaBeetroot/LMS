@@ -2,6 +2,7 @@ import datetime
 from django.db.models import Count, Avg, Max, Min
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
 from article.models import Topic, User, Comments
 from article.forms import TopicForm
 from django.views.generic.list import ListView
@@ -25,7 +26,7 @@ def get_topic_list(request):
 # Create - 2 variants
 # Update - 2 variants
 # Delete
-
+@login_required
 def create_topic(request):
     # I
     # topic = Topic(title='Django ORM', text='We are learning Django', type=4)

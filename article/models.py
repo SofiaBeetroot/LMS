@@ -1,6 +1,9 @@
+import datetime
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
+from django.contrib import admin
+from django.utils import timezone
 
 
 class Topic(models.Model):
@@ -19,6 +22,15 @@ class Topic(models.Model):
     creation_date = models.DateTimeField(auto_now_add=True)
     type = models.IntegerField(choices=TOPIC_TYPES)
     author = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='author', null=True)
+
+    @admin.display(
+        boolean=True,
+        ordering='creation_date',
+        description='Published recently?',
+    )
+    def was_published_recently(self):
+        now = timezone.now()
+        return now - datetime.timedelta(days=1) <= self.creation_date <= now
 
 
 class Comments(models.Model):
