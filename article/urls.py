@@ -9,4 +9,5 @@ urlpatterns = [
     path('create/form', TopicFormView.as_view()),
     path('update/', update_topic),
     path('delete/', delete_topic),
+    path('upload/', upload_view)
 ]

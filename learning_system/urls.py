@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.conf.urls.static import static
 from django.conf import settings
-from account.views import HomeView
+from account.views import *
 from django.contrib import admin
 from django.urls import path, include
 
@@ -24,6 +24,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('articles/', include('article.urls')),
     path('accounts/', include('account.urls')),
+    path('async/', async_view),
+    path('sync/', sync_view),
+    path('async_with_sync', async_with_sync_view),
+    path('sync_with_async', sync_with_async_view),
     # path('django/', include('django.contrib.auth.urls'))
 ]
 

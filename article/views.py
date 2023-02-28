@@ -1,4 +1,10 @@
+import asyncio
 import datetime
+import json
+import asyncio
+from time import perf_counter
+
+from asgiref.sync import sync_to_async, async_to_sync
 from django.db.models import Count, Avg, Max, Min
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
@@ -63,6 +69,8 @@ def delete_topic(request):
 
 
 """Filter"""
+
+
 def filter_topic(request):
     # Get all records in table
     all_topic = Topic.objects.all()
@@ -82,7 +90,8 @@ def filter_topic(request):
     topics = Topic.objects.filter(type=5).exclude(author_id=3)
     now_ = datetime.datetime.now()
     topics = Topic.objects.filter(type=4).union(
-        Topic.objects.filter(creation_date__range=(now_ - datetime.timedelta(days=7), now_ - datetime.timedelta(days=2))))
+        Topic.objects.filter(
+            creation_date__range=(now_ - datetime.timedelta(days=7), now_ - datetime.timedelta(days=2))))
     # topics = Topic.objects.annotate('type')
     # topics = Topic.objects.annotate(Count('author'))
     # topics = Topic.objects.aggregate(Max('text__len'))
@@ -131,3 +140,24 @@ def get_single_topic(request, pk):
         topic = None
     comments = Comments.objects.filter(topic=topic).order_by('-date')
     return render(request, 'topic.html', {'topic': topic, 'comments': comments})
+
+
+async def upload_json_file(file_name):
+    with open(file_name, 'r', encoding='utf-8') as file:
+        data = json.load(file)
+    start = perf_counter()
+    # for record in data:
+    #     await Topic.objects.acreate(**record)
+    topic_objects = [Topic(**record) for record in data]
+    Topic.objects.abulk_create(topic_objects)
+    end = perf_counter()
+    print('Time amount', end - start, sep=' --- ')
+
+
+@sync_to_async
+@login_required
+@async_to_sync
+async def upload_view(request):
+    loop = asyncio.get_event_loop()
+    loop.create_task(upload_json_file('D:/learning_system/article/data_files/topics.json'))
+    return HttpResponse('Upload starting')
