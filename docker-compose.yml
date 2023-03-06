@@ -1,0 +1,62 @@
+version: '3.3'
+
+services:
+  postgresql:
+    restart: always
+    container_name: postgresql
+    image: postgres:12
+    env_file: env/db.env
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgresql_db:/var/lib/postgresql/data
+
+  pgAdmin:
+    restart: always
+    image: dpage/pgadmin4:latest
+    ports:
+      - "5050:80"
+    env_file: env/pga.env
+    volumes:
+      - postgresql_admin:/var/lib/pgadmin
+    links:
+      - postgresql
+    depends_on:
+      - postgresql
+
+  web:
+    build: .
+    restart: always
+    entrypoint: /entrypoint.sh
+    command: python /code/manage.py runserver 0.0.0.0:8000
+    environment:
+      - DB_SERVER=postgresql
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    expose:
+      - 8000
+    links:
+      - postgresql
+    depends_on:
+      - postgresql
+
+  bot:
+    build:
+      context: ./
+      dockerfile: ./bot/Dockerfile
+    restart: always
+    env_file: bot/bot.env
+    command: python /code/bot/bot.py
+    volumes:
+      - .:/code
+    links:
+      - postgresql
+    depends_on:
+      - web
+
+
+volumes:
+  postgresql_db:
+  postgresql_admin:
