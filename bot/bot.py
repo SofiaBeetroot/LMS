@@ -9,9 +9,9 @@ from aiogram.dispatcher.filters import Text
 from aiogram.types import ParseMode
 from aiogram.utils import executor
 from aiogram.types import InlineQuery, InputTextMessageContent, InlineQueryResultArticle
-from bot.handlers.base import *
-from bot.handlers.pick import get_random_picture
-from bot.states.base import Form
+from handlers.base import *
+from handlers.pick import get_random_picture
+from states.base import Form
 
 bot = Bot(token=os.environ.get('TOKEN'))
 storage = MemoryStorage()
@@ -125,5 +125,6 @@ def register_message_handlers():
 
 
 if __name__ == '__main__':
+    print('Starting bot')
     register_message_handlers()
     executor.start_polling(dp)

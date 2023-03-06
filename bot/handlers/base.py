@@ -1,5 +1,5 @@
 from aiogram import types
-from bot.states.base import Form
+from states.base import Form
 
 
 async def send_hello(message: types.Message):
